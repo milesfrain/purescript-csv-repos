@@ -29,7 +29,8 @@ main = launchAff_ do
 getOrgRepos :: String -> Aff Repos
 getOrgRepos org = do
   let
-    url = "https://api.github.com/orgs/" <> org <> "/repos"
+    -- If we end up with more than 100 repos per org, we'll need something more elaborate
+    url = "https://api.github.com/orgs/" <> org <> "/repos?per_page=100"
   errorOrResponse <- AX.get AXRF.json url
   case errorOrResponse of
     Left httpError -> do
@@ -88,14 +89,17 @@ orgs =
       , "registry"
       , "roadmap"
       , "spago"
-      , "trypurscript"
+      , "trypurescript"
       ]
     }
   , { name: "purescript-contrib"
     , ignored:
       [ "atom-language"
+      , "book"
+      , "github-actions-toolkit"
       , "governance"
       , "pulp"
+      , "setup"
       , "vim"
       ]
     }
